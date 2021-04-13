@@ -24,13 +24,19 @@ module.exports = appInfo => {
           connectionMiddleware: [ 'auth' ],
           packetMiddleware: [ 'filter' ],
         },
-        '/example': {
-          connectionMiddleware: [ 'connection' ],
-          packetMiddleware: ['packet'],
-        },
       },
     };
-  
+  config.bodyParser={
+      formLimit: '1000mb',
+      jsonLimit: '1000mb',
+      textLimit: '1000mb',
+      onerror:
+        (err, ctx) => {
+          console.log(err);
+          ctx.body = 'error';
+          ctx.status = 500;
+        },
+  };
   config.mysql={
     client:{
       host:'localhost',

@@ -7,7 +7,9 @@ class MessageController extends Controller {
   async sendmessage() {
     const { ctx } = this;
     let file = ctx.request.files
-    console.log(files)
+    const { data } = ctx.request.body
+    console.log(ctx)
+    //console.log(data)
     /* file.forEach(item=>{
       let file = fs.readFileSync(item.filepath)
       fs.writeFileSync(path.join('./',`uploadfile/1.jpg`),file)

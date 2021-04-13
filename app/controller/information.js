@@ -6,7 +6,6 @@ class InfoController extends Controller{
     async editinfo(){
         const { ctx } = this
         try{
-            //console.log(ctx.request.body)
             const { data } = ctx.request.body
             const res=await ctx.service.information.editinfo(data)
             res && ctx.resSuccess(res,'修改成功')

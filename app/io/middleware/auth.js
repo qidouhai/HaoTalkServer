@@ -2,7 +2,7 @@
 
 const PREFIX = 'room';
 
-module.exports = () => {
+module.exports = app => {
   return async (ctx, next) => {
     const { app, socket, logger, helper } = ctx;
     const id = socket.id;
@@ -14,7 +14,6 @@ module.exports = () => {
     const rooms = [ room ];
 
     console.log('#user_info', id, room, userId);
-
     const tick = (id, msg) => {
       console.log('#tick', id, msg);
 
@@ -44,13 +43,13 @@ module.exports = () => {
     // 用户加入
     console.log('#join', room);
     socket.join(room);
-
+    socket.emit('MESSAGE','packertsssss')
     // 在线列表
     nsp.adapter.clients(rooms, (err, clients) => {
       console.log('#online_join', clients);
 
       // 更新在线用户列表
-      nsp.to(room).emit('online', {
+      nsp.to(room).emit('MESSAGE', {
         clients,
         action: 'join',
         target: 'participator',

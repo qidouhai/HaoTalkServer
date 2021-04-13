@@ -13,7 +13,7 @@ class AdminController extends Controller{
                     userid: data.userid,
                     password: data.password,
                 }, app.config.jwt.secret,{
-                    //expiresIn: '30s',
+                    expiresIn: '259200s',
                 });
                 ctx.resSuccess(token,res.msg)
             }else{

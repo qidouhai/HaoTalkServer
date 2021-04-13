@@ -2,7 +2,7 @@
 'use strict';
 module.exports = app => {
   return async next => {
-    this.socket.emit('online', 'packet received!');
+    this.socket.emit('MESSAGE', 'packet received!');
     console.log('packet:', this.packet);
     await next();
   };

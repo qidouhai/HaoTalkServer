@@ -4,7 +4,7 @@
  * @param {Egg.Application} app - egg application
  */
 module.exports = app => {
-  const { router, controller, io } = app;
+  const { router, controller, io, jwt } = app;
   //登录
   router.post('/login',controller.admin.login)
   router.post('/signup',controller.admin.signup)
@@ -13,7 +13,7 @@ module.exports = app => {
   //发送消息
   router.post('/sendmessage',controller.message.sendmessage)
   //获取消息列表
-  router.post('/getmessage',controller.information.getmessage)
+  router.post('/getmessage',jwt,controller.information.getmessage)
   //获取个人信息
   router.get('/getuserdata',controller.information.getuserdata)
   //编辑个人信息
@@ -21,5 +21,5 @@ module.exports = app => {
   //获取好友列表
   router.get('/getfriends',controller.information.getfriends)
   //socket接口
-  io.of('/').route('chat', io.controller.chat.exchange);
+  io.of('/').route('exchange', io.controller.chat.exchange);
 };

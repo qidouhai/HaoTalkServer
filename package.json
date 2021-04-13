@@ -1,5 +1,5 @@
 {
-  "name": "chatserver",
+  "name": "HaoTalkServer",
   "version": "1.0.0",
   "description": "a node.js server",
   "private": true,
