@@ -27,9 +27,9 @@ module.exports = appInfo => {
       },
     };
   config.bodyParser={
-      formLimit: '1000mb',
-      jsonLimit: '1000mb',
-      textLimit: '1000mb',
+      formLimit: '100mb',
+      jsonLimit: '100mb',
+      textLimit: '100mb',
       onerror:
         (err, ctx) => {
           console.log(err);

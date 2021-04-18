@@ -8,7 +8,7 @@ class MessageController extends Controller {
     const { ctx } = this;
     let file = ctx.request.files
     const { data } = ctx.request.body
-    console.log(ctx)
+    console.log('接受到消息')
     //console.log(data)
     /* file.forEach(item=>{
       let file = fs.readFileSync(item.filepath)
