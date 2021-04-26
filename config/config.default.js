@@ -1,7 +1,7 @@
 /* eslint valid-jsdoc: "off" */
 
 'use strict';
-
+const qs = require('qs')
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
@@ -25,6 +25,10 @@ module.exports = appInfo => {
           packetMiddleware: [ 'filter' ],
         },
       },
+      generateId: req=>{
+        const data = qs.parse(req.url.split('?')[1])
+        return data.userId
+      }
     };
   config.bodyParser={
       formLimit: '100mb',
@@ -37,6 +41,16 @@ module.exports = appInfo => {
           ctx.status = 500;
         },
   };
+  config.cache={
+    default:'memory',
+    stores:{
+      memory:{
+        driver:'memory',
+        max:100,
+        ttl:0
+      }
+    }
+  }
   config.mysql={
     client:{
       host:'localhost',

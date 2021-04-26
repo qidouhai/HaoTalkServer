@@ -48,6 +48,17 @@ class InfoController extends Controller{
             ctx.resFail(err.message)
         }
     }
+
+    async getgroups(){
+        const { ctx } = this
+        try{
+            const uid = ctx.request.url.split('=')[1]
+            const res = await ctx.service.information.getgroups(uid)
+            res && ctx.resSuccess(res,'获取成功')
+        }catch(err){
+            ctx.resFail(err.message)
+        }
+    }
 }
 
 module.exports = InfoController;

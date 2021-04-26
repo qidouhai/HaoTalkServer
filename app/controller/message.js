@@ -5,17 +5,20 @@ const Controller = require('egg').Controller;
 
 class MessageController extends Controller {
   async sendmessage() {
-    const { ctx } = this;
+    const { ctx, app } = this;
     let file = ctx.request.files
-    const { data } = ctx.request.body
-    console.log('接受到消息')
-    //console.log(data)
     /* file.forEach(item=>{
       let file = fs.readFileSync(item.filepath)
       fs.writeFileSync(path.join('./',`uploadfile/1.jpg`),file)
     } 
     // ctx.cleanupRequestFiles()*/
-    ctx.resSuccess('发送成功');
+    try{
+      const { data } = ctx.request.body
+      const res=await ctx.service.message.sendmessage(data)
+      res && ctx.resSuccess(res,'修改成功')
+    }catch(err){
+      ctx.resFail(err.message)
+    }
   }
 
   async fetchHistory() {
