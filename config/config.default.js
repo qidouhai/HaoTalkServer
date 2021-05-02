@@ -51,6 +51,13 @@ module.exports = appInfo => {
       }
     }
   }
+  /* config.cluster = {
+    listen: {
+      path: '',
+      port: 7001,
+      hostname: '192.168.43.249',
+    }
+} */
   config.mysql={
     client:{
       host:'localhost',

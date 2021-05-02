@@ -23,8 +23,13 @@ module.exports = app => {
     // 用户加入
     console.log('用户'+id+'上线');
     socket.join('sysroom');
+
+    let rooms = await app.mysql.query(`select roomid from groups where userid='${id}' and status=1`)
+    rooms.forEach(item => {
+      socket.join(item.roomid)
+    });
     // 在线列表
-    //console.log('在线列表', nsp.adapter.sids);
+    console.log('在线列表', nsp.adapter.sids);
    
 
     await next();

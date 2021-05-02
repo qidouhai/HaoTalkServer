@@ -30,6 +30,7 @@ class InfoService extends Service{
         })
         if(res[0].avatar){
             res[0].avatar=res[0].avatar.toString()
+            res[0].backavatar=res[0].backavatar.toString()
             return res
         }else{
             return res
@@ -43,16 +44,23 @@ class InfoService extends Service{
             where :{status:1,userid:data.uid},
             columns:['avatar']
         })
-        console.log(data.idList)
         for(let item of data.idList){
             if(item.startsWith('x'))
             {
-                const message = await app.mysql.select('groupmsg',{
-                    where:{roomid:item,status:1},
-                    limit:10,
-                    orders:[['sendtime','esc']]
-                    })
-                console.log(1)
+                const roominfo = await app.mysql.query(`select avatar,roomname,creater from groupdata where roomid='${item}' and status = 1`)
+                const message = await app.mysql.query(`select avatar,sender,roomid,msgtype,context,contexttype,sendtime from groupmsg,userdata where userid=sender and roomid='${item}' and groupmsg.status=1 and userdata.status=1`)
+                if(!message.length) continue
+                message.forEach(item => {
+                    item.avatar = item.avatar.toString()
+                    item.context = item.context.toString()
+                });
+                result.push({
+                    uid:item,
+                    avatar:roominfo[0].avatar?roominfo[0].avatar.toString():null,
+                    name:roominfo[0].roomname,
+                    list:message,
+                    creater:roominfo[0].creater
+                })
             }
             else
             {
