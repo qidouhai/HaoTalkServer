@@ -12,7 +12,6 @@ class AppBootHook {
       // 例如：从数据库加载数据到内存缓存
       console.log('服务器启动')
       let rooms = await this.app.mysql.query(`select roomid from groupdata where status=1`)
-      console.log(rooms)
       for(var item of rooms){
         await this.app.cache.set(item.roomid,item.roomid)
       }

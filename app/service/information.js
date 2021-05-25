@@ -37,6 +37,22 @@ class InfoService extends Service{
         }
     }
 
+    async getgroupdata(uid){
+        const { app, ctx } = this
+        const res = await app.mysql.beginTransactionScope(async conn=>{
+            let baseinfo = await conn.select('groupdata',{
+                where:{roomid:uid,status:1}
+            })
+            let members = await conn.query(`select avatar,userid,username from userdata where userid in (select userid from groups where groups.roomid='${uid}' and groups.status=1)`)
+            members.forEach(item => {
+                item.avatar = item.avatar && item.avatar.toString()
+            });
+            baseinfo[0].groupmember = members
+            return {...baseinfo[0],avatar:baseinfo[0].avatar&&baseinfo[0].avatar.toString()}
+        },ctx)
+        return res
+    }
+
     async getmessage(data){
         const { app } = this
         let result=[]
@@ -48,7 +64,7 @@ class InfoService extends Service{
             if(item.startsWith('x'))
             {
                 const roominfo = await app.mysql.query(`select avatar,roomname,creater from groupdata where roomid='${item}' and status = 1`)
-                const message = await app.mysql.query(`select avatar,sender,roomid,msgtype,context,contexttype,sendtime from groupmsg,userdata where userid=sender and roomid='${item}' and groupmsg.status=1 and userdata.status=1`)
+                const message = await app.mysql.query(`select avatar,sender,sendername,roomid,msgtype,context,contexttype,sendtime from groupmsg,userdata where userid=sender and roomid='${item}' and groupmsg.status=1 and userdata.status=1`)
                 if(!message.length) continue
                 message.forEach(item => {
                     item.avatar = item.avatar.toString()

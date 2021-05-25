@@ -38,6 +38,18 @@ class InfoController extends Controller{
         }
     }
 
+    async getgroupdata(){
+        const { ctx } = this;
+        try{
+            const uid = ctx.request.url.split('=')[1]
+            const res= await ctx.service.information.getgroupdata(uid)
+            //console.log(res)
+            res && ctx.resSuccess(res,'获取成功')
+        }catch(err){
+            ctx.resFail(err.message)
+        }
+    }
+
     async getfriends(){
         const { ctx } = this;
         try{

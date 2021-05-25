@@ -10,7 +10,7 @@ module.exports = app => {
   router.post('/signup',controller.admin.signup)
 
   //历史消息
-  router.get('/fetchHistory',controller.message.fetchHistory)
+  router.post('/fetchHistory',controller.message.fetchHistory)
   //发送消息
   router.post('/sendmessage',controller.message.sendmessage)
 
@@ -18,6 +18,8 @@ module.exports = app => {
   router.post('/getmessage',jwt,controller.information.getmessage)
   //获取个人信息
   router.get('/getuserdata',controller.information.getuserdata)
+  //获取群组信息
+  router.get('/getgroupdata',controller.information.getgroupdata)
   //编辑个人信息
   router.post('/editinfo',controller.information.editinfo)
   //获取好友列表

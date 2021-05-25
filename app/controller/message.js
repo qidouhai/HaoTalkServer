@@ -23,9 +23,14 @@ class MessageController extends Controller {
 
   async fetchHistory() {
     const { ctx } = this
-    let file = ctx.request
-    console.log(file)
-    ctx.resSuccess('获取成功') 
+    try{
+      const { data } = ctx.request.body
+      console.log(data)
+      const res = await ctx.service.message.fetchHistory(data)
+      res && ctx.resSuccess(res,'获取成功')
+    }catch(err){
+      ctx.resFail(err.message)
+    }
   }
 
 }
