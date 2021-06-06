@@ -23,6 +23,25 @@ class InfoService extends Service{
         },ctx)
         return res
     }
+
+    async editgroup(data){
+        const { app, ctx } = this
+        const res = await app.mysql.beginTransactionScope(async conn=>{
+            await conn.query(`update groupdata set status=0 where roomid='${data.roomid}'`)
+            await conn.insert('groupdata',{
+                id:null,
+                creater:data.creater,
+                roomname:data.roomname,
+                avatar:data.avatar,
+                poster:data.poster||null,
+                roomid:data.roomid,
+                status:1
+            })
+            return { success: true };
+        },ctx)
+        return res
+    }
+
     async getuserdata(uid){
         const { app } = this
         const res= await app.mysql.select('userdata',{
@@ -54,7 +73,10 @@ class InfoService extends Service{
     }
 
     async getmessage(data){
+        if(!data.idList) return []
         const { app } = this
+        let lasttimeinfo = await app.mysql.query(`select lastonlinetime from users where userid='${data.uid}' and status=1`)
+        let lasttime = lasttimeinfo[0].lastonlinetime
         let result=[]
         var mainavatar = await app.mysql.select('userdata',{
             where :{status:1,userid:data.uid},
@@ -64,7 +86,8 @@ class InfoService extends Service{
             if(item.startsWith('x'))
             {
                 const roominfo = await app.mysql.query(`select avatar,roomname,creater from groupdata where roomid='${item}' and status = 1`)
-                const message = await app.mysql.query(`select avatar,sender,sendername,roomid,msgtype,context,contexttype,sendtime from groupmsg,userdata where userid=sender and roomid='${item}' and groupmsg.status=1 and userdata.status=1`)
+                const message = await app.mysql.query(`select avatar,sender,sendername,roomid receiver,msgtype,context,contexttype,sendtime from groupmsg,userdata where userid=sender and roomid='${item}' 
+                and sendtime<'${lasttime}' and groupmsg.status=1 and userdata.status=1 order by sendtime `)
                 if(!message.length) continue
                 message.forEach(item => {
                     item.avatar = item.avatar.toString()
@@ -81,11 +104,13 @@ class InfoService extends Service{
             else
             {
                 let info= await app.mysql.query(`select avatar,username,littlename from userdata,friends where userdata.userid=friends.userid and userdata.userid=${item} and userdata.status=1`)
-                const message = await app.mysql.select('friendmsg',{
+                const message = await app.mysql.query(`select * from friendmsg where sender in('${data.uid}','${item}') and receiver in('${data.uid}','${item}')
+                and status=1 and sendtime<'${lasttime}' order by sendtime`)
+                /* const message = await app.mysql.query('friendmsg',{
                     where:{sender:[data.uid,item],status:1,receiver:[data.uid,item]},
                     limit:10,
                     orders:[['sendtime','esc']]
-                })
+                }) */
                 if(!message.length){
                     continue
                 }

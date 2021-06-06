@@ -22,6 +22,8 @@ module.exports = app => {
   router.get('/getgroupdata',controller.information.getgroupdata)
   //编辑个人信息
   router.post('/editinfo',controller.information.editinfo)
+  //编辑群组信息
+  router.post('/editgroup',controller.information.editgroup)
   //获取好友列表
   router.get('/getfriends',controller.information.getfriends)
   //获取群组列表

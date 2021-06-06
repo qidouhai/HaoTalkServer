@@ -25,7 +25,7 @@ class MessageController extends Controller {
     const { ctx } = this
     try{
       const { data } = ctx.request.body
-      console.log(data)
+      //console.log(data)
       const res = await ctx.service.message.fetchHistory(data)
       res && ctx.resSuccess(res,'获取成功')
     }catch(err){

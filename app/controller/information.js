@@ -14,6 +14,17 @@ class InfoController extends Controller{
         }
     }
 
+    async editgroup(){
+        const { ctx } = this
+        try{
+            const { data } = ctx.request.body
+            const res=await ctx.service.information.editgroup(data)
+            res && ctx.resSuccess(res,'修改成功')
+        }catch(err){
+            ctx.resFail(err.message)
+        }
+    }
+
     async getmessage(){
         const { ctx } = this;
         try{
