@@ -66,9 +66,10 @@ module.exports = app => {
     await next();
 
     // 用户离开
-    console.log(`用户${id}离开`);
+    
     await app.mysql.query(`update users set lastonlinetime='${Date.now()}' where userid=${id}`)
     await app.cache.del(id)
+    console.log(`用户${id}离开`);
     //await app.cache.has(id)
 
   };

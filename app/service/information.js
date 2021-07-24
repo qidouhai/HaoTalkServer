@@ -86,8 +86,8 @@ class InfoService extends Service{
             if(item.startsWith('x'))
             {
                 const roominfo = await app.mysql.query(`select avatar,roomname,creater from groupdata where roomid='${item}' and status = 1`)
-                const message = await app.mysql.query(`select avatar,sender,sendername,roomid receiver,msgtype,context,contexttype,sendtime from groupmsg,userdata where userid=sender and roomid='${item}' 
-                and sendtime<'${lasttime}' and groupmsg.status=1 and userdata.status=1 order by sendtime `)
+                const message = await app.mysql.query(`select * from (select avatar,sender,sendername,roomid receiver,msgtype,context,contexttype,sendtime from groupmsg,userdata where userid=sender and roomid='${item}' 
+                and sendtime<'${lasttime}' and groupmsg.status=1 and userdata.status=1 order by sendtime desc limit 10) temporary order by sendtime`)
                 if(!message.length) continue
                 message.forEach(item => {
                     item.avatar = item.avatar.toString()
@@ -104,8 +104,8 @@ class InfoService extends Service{
             else
             {
                 let info= await app.mysql.query(`select avatar,username,littlename from userdata,friends where userdata.userid=friends.userid and userdata.userid=${item} and userdata.status=1`)
-                const message = await app.mysql.query(`select * from friendmsg where sender in('${data.uid}','${item}') and receiver in('${data.uid}','${item}')
-                and status=1 and sendtime<'${lasttime}' order by sendtime`)
+                const message = await app.mysql.query(`select * from (select * from friendmsg where sender in('${data.uid}','${item}') and receiver in('${data.uid}','${item}')
+                and status=1 and sendtime<'${lasttime}' order by sendtime desc limit 10) temporary order by sendtime`)
                 /* const message = await app.mysql.query('friendmsg',{
                     where:{sender:[data.uid,item],status:1,receiver:[data.uid,item]},
                     limit:10,
