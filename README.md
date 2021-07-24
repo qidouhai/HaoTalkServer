@@ -31,3 +31,5 @@ $ npm stop
 
 
 [egg]: https://eggjs.org
+
+数据库sql文件见目录
