@@ -33,3 +33,5 @@ $ npm stop
 [egg]: https://eggjs.org
 
 数据库sql文件见目录
+
+node版本v12.18.1
