@@ -1,4 +1,4 @@
-# chatserver
+# HaoTalkServer
 
 a node.js server
 
